@@ -30,7 +30,7 @@ class GroupAssets {
             nativePath = nativePath.replace(/\\/g, '/');
             array.push({ nativePath, url });
         } else if (object.dependUuids) {
-            object.dependUuids.forEach(uuid => this.getNativePath({url, uuid}, buildAssets, array));
+            object.dependUuids.forEach(uuid => this.getNativePath({ url, uuid }, buildAssets, array));
         }
     }
 
@@ -49,19 +49,18 @@ class GroupAssets {
 
     groupAssets(array) {
         this.groupFiles = array;
-        return;
+        // return;
         //不进行分组，由使用者自己解析，这样灵活性更强
 
         let object = {};
         array.map(item => {
             let pathArray = item.url.split('/');
             let moduleName = pathArray[0];
-
+            Editor.log(moduleName + "==" + item.url);
             //如果在resources目录，放入对应子目录
             if (moduleName === 'resources') {
-                moduleName = pathArray[1];
+                moduleName = 'resources';
             }
-
             let files = object[moduleName];
 
             if (!files) {
@@ -82,6 +81,7 @@ class GroupAssets {
      * @param {*} fileName 
      */
     saveToFile(fileName) {
+        Editor.log(fileName);
         let str = this.getGroupFiles();
         if (str) {
             fs.writeFileSync(fileName, str, 'utf8');
@@ -90,7 +90,7 @@ class GroupAssets {
 
     getGroupFiles() {
         if (!this.groupFiles) {
-            Editor.Dialog.messageBox({ type:'error', message: '数据不存在！' });
+            Editor.Dialog.messageBox({ type: 'error', message: '数据不存在！' });
             return '';
         }
 
@@ -101,16 +101,16 @@ class GroupAssets {
     findAssets(options, cb) {
         //分析图片文件
         if (!options) {
-            Editor.Dialog.messageBox({ type:'error', message: '请构建后执行此操作！' });
+            Editor.Dialog.messageBox({ type: 'error', message: '请构建后执行此操作！' });
             return;
         }
         let buildResults = options.buildResults;
         let tasks = [
-            'sprite-frame', 
-            'audio-clip', 
-            'sprite-atlas', 
-            'tiled-map', 
-            'dragonbones-atlas', 
+            'sprite-frame',
+            'audio-clip',
+            'sprite-atlas',
+            'tiled-map',
+            'dragonbones-atlas',
             'spine',
             'asset',
             'label-atlas',
@@ -122,7 +122,7 @@ class GroupAssets {
                 let items = this.getAssetFiles(assetsInfos, buildResults._buildAssets).concat();
                 cb(null, items);
             });
-        }, (err, array) => {    
+        }, (err, array) => {
             //去掉前缀路径
             let buildTemplate = path.basename(options.dest);
             let root = path.join(options.buildPath, buildTemplate).replace(/\\/g, '/');
@@ -138,7 +138,7 @@ class GroupAssets {
                     } else {
                         item.url = item.url.substr(DB_ASSETS.length);
                     }
-                    
+
                     data.push(item);
                 })
             });
