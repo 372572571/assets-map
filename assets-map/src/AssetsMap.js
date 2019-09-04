@@ -72,11 +72,26 @@ class GroupAssets {
 
             if (!files.includes(item.nativePath)) {
                 files.push(item.nativePath);
-                files.push(`${item.nativePath.split('.')[0]}.json`) // json 对应文件也放进去
-            }
+                // res/import JSON 文件
+                files.push(this.getAssetsJson(item.nativePath)) // json 对应文件也放进去
+            }2
         })
         // console.log(JSON.stringify(object, null, 4));
         this.groupFiles = object;
+    }
+
+    /**
+     * 获取到资源对应的json
+     * @param {*} nativePath 
+     */
+    getAssetsJson(nativePath) {
+        let json_path = nativePath.split('/');
+        json_path[1] = 'import';
+        json_path = json_path.join('/');
+        json_path = json_path.split('.');
+        json_path[1] = 'json'
+        json_path = json_path.join('.')
+        return json_path;
     }
 
     /**
