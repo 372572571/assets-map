@@ -54,9 +54,11 @@ class GroupAssets {
 
         let object = {};
         array.map(item => {
+            // console.log('jsw', SON.stringify(item));
             let pathArray = item.url.split('/');
             let moduleName = pathArray[0];
-            Editor.log(moduleName + "==" + item.url);
+            // Editor.log(moduleName + "==" + item.url);
+            // Editor.log(moduleName + "jsw " + JSON.stringify(item));
             //如果在resources目录，放入对应子目录
             if (moduleName === 'resources') {
                 moduleName = 'resources';
@@ -70,9 +72,10 @@ class GroupAssets {
 
             if (!files.includes(item.nativePath)) {
                 files.push(item.nativePath);
+                files.push(`${item.nativePath.split('.')[0]}.json`) // json 对应文件也放进去
             }
         })
-        console.log(JSON.stringify(object, null, 4));
+        // console.log(JSON.stringify(object, null, 4));
         this.groupFiles = object;
     }
 
@@ -111,14 +114,17 @@ class GroupAssets {
             'sprite-atlas',
             'tiled-map',
             'dragonbones-atlas',
+            'dragonbones',
             'spine',
             'asset',
             'label-atlas',
             'bitmap-font',
             'ttf-font',
+            'json',
         ];
-        async.mapSeries(tasks, (item, cb) => {
-            Editor.assetdb.queryAssets('db://**/*', item, (err, assetsInfos) => {
+        async.mapSeries(tasks, (item, cb) => { // 依次执行 tasks 数组
+            let str = "db://**/*";
+            Editor.assetdb.queryAssets(str, item, (err, assetsInfos) => { // cocos api 查询资源
                 let items = this.getAssetFiles(assetsInfos, buildResults._buildAssets).concat();
                 cb(null, items);
             });
