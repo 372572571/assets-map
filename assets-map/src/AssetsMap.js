@@ -73,7 +73,7 @@ class GroupAssets {
             if (!files.includes(item.nativePath)) {
                 files.push(item.nativePath);
                 // res/import JSON 文件
-                files.push(this.getAssetsJson(item.nativePath)) // json 对应文件也放进去
+                // files.push(this.getAssetsJson(item.nativePath)) // json 对应文件也放进去
             }2
         })
         // console.log(JSON.stringify(object, null, 4));
