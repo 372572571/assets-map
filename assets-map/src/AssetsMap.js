@@ -26,6 +26,7 @@ class GroupAssets {
         }
         let url = item.url;
         let nativePath = object.nativePath;
+        // console.log('jsw OBJECT', JSON.stringify(object))
         if (nativePath) {
             nativePath = nativePath.replace(/\\/g, '/');
             array.push({ nativePath, url });
@@ -73,8 +74,8 @@ class GroupAssets {
             if (!files.includes(item.nativePath)) {
                 files.push(item.nativePath);
                 // res/import JSON 文件
-                // files.push(this.getAssetsJson(item.nativePath)) // json 对应文件也放进去
-            }2
+                files.push(this.getAssetsJson(item.nativePath)) // json 对应文件也放进去
+            }
         })
         // console.log(JSON.stringify(object, null, 4));
         this.groupFiles = object;
@@ -136,6 +137,7 @@ class GroupAssets {
             'bitmap-font',
             'ttf-font',
             'json',
+            // 'scene'
         ];
         async.mapSeries(tasks, (item, cb) => { // 依次执行 tasks 数组
             let str = "db://**/*";
